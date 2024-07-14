@@ -28,8 +28,8 @@ public class CatalogConfiguration {
                 .build();
 
         ServiceDefinition serviceDefinition = ServiceDefinition.builder()
-                .id("server-wm")
-                .name("wm")
+                .id("server-vm")
+                .name("vm")
                 .description("A server in the cloud")
                 .bindable(true)
                 .plans(freePlan, enterprisePlan)

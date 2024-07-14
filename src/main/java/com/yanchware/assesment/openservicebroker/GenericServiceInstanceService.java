@@ -1,6 +1,5 @@
 package com.yanchware.assesment.openservicebroker;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.yanchware.assesment.providers.ProviderServiceFactory;
 import com.yanchware.assesment.providers.ProvidersEnum;
 import com.yanchware.assesment.providers.service.CloudProviderService;
@@ -8,6 +7,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.servicebroker.model.instance.*;
 import org.springframework.cloud.servicebroker.service.ServiceInstanceService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -23,28 +23,46 @@ public class GenericServiceInstanceService implements ServiceInstanceService {
 
     @Override
     public Mono<CreateServiceInstanceResponse> createServiceInstance(CreateServiceInstanceRequest createServiceInstanceRequest) {
-        log.debug("Platform id: {}, Instance id: {}, Plan Id: {}",
+        log.debug("Platform id: {}, Instance id: {}, Plan Id: {}, Service definition id: {}",
                 createServiceInstanceRequest.getPlatformInstanceId(),
                 createServiceInstanceRequest.getServiceInstanceId(),
-                createServiceInstanceRequest.getPlan().getId());
-
+                createServiceInstanceRequest.getPlanId(),
+                createServiceInstanceRequest.getServiceDefinitionId());
 
         CloudProviderService providerService = this.getProviderService(createServiceInstanceRequest.getPlatformInstanceId());
 
-        return Mono.just(CreateServiceInstanceResponse.builder().dashboardUrl("https://google.it").build());
+        return providerService
+                .createServiceInstance(
+                        SecurityContextHolder.getContext().getAuthentication(),
+                        createServiceInstanceRequest.getServiceInstanceId(),
+                        createServiceInstanceRequest.getPlan(),
+                        createServiceInstanceRequest.getServiceDefinition());
+
     }
 
     @Override
     public Mono<GetServiceInstanceResponse> getServiceInstance(GetServiceInstanceRequest request) {
-        return ServiceInstanceService.super.getServiceInstance(request);
+        CloudProviderService providerService = this.getProviderService(request.getPlatformInstanceId());
+
+        return providerService
+                .getServiceInstance(
+                        SecurityContextHolder.getContext().getAuthentication(),
+                        request.getServiceInstanceId()
+                );
     }
 
     @Override
     public Mono<DeleteServiceInstanceResponse> deleteServiceInstance(DeleteServiceInstanceRequest deleteServiceInstanceRequest) {
-        return null;
+        CloudProviderService providerService = this.getProviderService(deleteServiceInstanceRequest.getPlatformInstanceId());
+
+        return providerService
+                .deleteServiceInstance(
+                        SecurityContextHolder.getContext().getAuthentication(),
+                        deleteServiceInstanceRequest.getServiceInstanceId()
+                );
     }
 
-    private CloudProviderService getProviderService(@NonNull String platformId){
+    private CloudProviderService getProviderService(@NonNull String platformId) {
         return providerServiceFactory
                 .getInstance(ProvidersEnum.valueOf(platformId.toUpperCase()));
     }
