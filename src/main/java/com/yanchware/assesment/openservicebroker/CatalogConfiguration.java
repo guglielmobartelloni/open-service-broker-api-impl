@@ -13,20 +13,26 @@ public class CatalogConfiguration {
 
     @Bean
     public Catalog catalog() {
-        Plan plan = Plan.builder()
-                .id("simple-plan")
-                .name("standard")
-                .description("A simple plan")
+        Plan freePlan = Plan.builder()
+                .id("free-plan")
+                .name("free")
+                .description("The starting free plan")
                 .free(true)
                 .build();
 
+        Plan enterprisePlan = Plan.builder()
+                .id("enterprise-plan")
+                .name("enterprise")
+                .description("The enterprise plan")
+                .free(false)
+                .build();
+
         ServiceDefinition serviceDefinition = ServiceDefinition.builder()
-                .id("example-service")
-                .name("example")
-                .description("A simple example")
+                .id("server-wm")
+                .name("wm")
+                .description("A server in the cloud")
                 .bindable(true)
-                .tags("example", "tags")
-                .plans(plan)
+                .plans(freePlan, enterprisePlan)
                 .build();
 
         return Catalog.builder()
