@@ -47,7 +47,9 @@ public class GenericServiceInstanceService implements ServiceInstanceService {
         return providerService
                 .getServiceInstance(
                         SecurityContextHolder.getContext().getAuthentication(),
-                        request.getServiceInstanceId()
+                        request.getServiceInstanceId(),
+                        request.getPlanId(),
+                        request.getServiceDefinitionId()
                 );
     }
 
@@ -58,8 +60,9 @@ public class GenericServiceInstanceService implements ServiceInstanceService {
         return providerService
                 .deleteServiceInstance(
                         SecurityContextHolder.getContext().getAuthentication(),
-                        deleteServiceInstanceRequest.getServiceInstanceId()
-                );
+                        deleteServiceInstanceRequest.getServiceInstanceId(),
+                        deleteServiceInstanceRequest.getPlan(),
+                        deleteServiceInstanceRequest.getServiceDefinition());
     }
 
     private CloudProviderService getProviderService(@NonNull String platformId) {

@@ -10,6 +10,6 @@ import reactor.core.publisher.Mono;
 
 public interface CloudProviderService {
     Mono<CreateServiceInstanceResponse> createServiceInstance(Authentication authentication, String serviceInstanceId, Plan plan, ServiceDefinition serviceDefinition);
-    Mono<GetServiceInstanceResponse> getServiceInstance(Authentication authentication, String serviceInstanceId);
-    Mono<DeleteServiceInstanceResponse> deleteServiceInstance(Authentication authentication, String serviceInstanceId);
+    Mono<GetServiceInstanceResponse> getServiceInstance(Authentication authentication, String serviceInstanceId, String planId, String serviceDefinitionId);
+    Mono<DeleteServiceInstanceResponse> deleteServiceInstance(Authentication authentication, String serviceInstanceId, Plan plan, ServiceDefinition serviceDefinition);
 }

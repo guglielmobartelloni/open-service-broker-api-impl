@@ -2,6 +2,7 @@ package com.yanchware.assesment.security;
 
 import com.yanchware.assesment.user.AppUser;
 import io.micrometer.common.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class BasicAuthManager implements AuthenticationManager {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
@@ -36,10 +38,12 @@ public class BasicAuthManager implements AuthenticationManager {
 
         try {
             user = userDetailsService.loadUserByUsername(username);
+            log.debug("Found user: {}", user);
         } catch (UsernameNotFoundException ex) {
             throw new BadCredentialsException("User does not exists");
         }
 
+        log.debug("Passowrd: {}", password);
         if (StringUtils.isBlank(password) || !passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Password is wrong");
         }

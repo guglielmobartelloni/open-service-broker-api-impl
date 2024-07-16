@@ -2,6 +2,7 @@ package com.yanchware.assesment.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import java.util.Collections;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
