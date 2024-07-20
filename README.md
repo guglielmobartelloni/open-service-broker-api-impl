@@ -29,16 +29,30 @@ using this method the application knows where to call the services.
 
 ## Authentication
 
-The authentication part is implemented using `Spring Security` with basic auth and a relational database to persist any information needed. 
+The authentication part is implemented using `Spring Security` with basic auth and a relational database to persist any information needed. The data persistence layer was implemented using `Spring Data JPA` with PostgreSQL.
 
 
-Two main ways of authenticating the apis was considered: JWT tokens and secret key with basic auth.
+Two main ways of authenticating the apis were considered: JWT tokens and secret key with basic auth.
 Basic auth was chosen to reflect the Stripe API way of authenticating APIs using a private key sent on every request which is the password of the basic auth flow. 
 
 
-The user persisted in the database has a username that will be used for the authentication process. In the database there is also a password that will be used to logged in a hypothetical frontend and from there generate the required api secret key to use in the api requests, this part was left out for time sake.
+The user persisted in the database has a username that will be used for the authentication process. In the database there is also a password that will be used to log-in an hypothetical frontend and from there generate the required api secret key to use in the api requests, the generation part was left out for time sake.
 
-Moreover, there are the various cloud providers (AWS, GCP...) access keys stored on the db that will be used to manage the resources on the cloud.
+An example of a call to the application will look like the following:
+
+```bash
+curl --location --request PUT 'http://localhost:8080/aws/v2/service_instances/test_id' \
+    --header 'Content-Type: application/json' \
+    -m 'test_user:secret_key' \
+    --data '{
+      "service_id": "server-vm",
+      "plan_id": "free-plan",
+      "context": {},
+      "parameters": {}
+    }'
+```
+
+Moreover, there are various cloud providers (AWS, GCP...) access keys stored on the db that will be used to manage the resources on the cloud.
 
 Ideally all the secrets stored in the db will be encrypted with strong hashing algorithms.
 
@@ -60,7 +74,4 @@ The way to connect to every cloud provider has to be considered for each case be
 In the case of AWS there is an official SDK for Java, this was used for the application. 
 For other cloud providers may be necessary to use raw HTTP calls.
 
-## Database Persistence
-
-For the authentication part there is a data persistence layer using `Spring Data JPA`.
 
