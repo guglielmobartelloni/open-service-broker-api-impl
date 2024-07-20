@@ -24,7 +24,7 @@ or for GCP:
 ```
 
 
-using this method the application knows where to call the services.
+using this method the application knows in which cloud provider the services will be called.
 
 
 ## Authentication
@@ -72,6 +72,18 @@ In detail the user has the following data:
 The way to connect to every cloud provider has to be considered for each case because different cloud providers have different way to interact with them. 
 
 In the case of AWS there is an official SDK for Java, this was used for the application. 
-For other cloud providers may be necessary to use raw HTTP calls.
+For other cloud providers it may be necessary to use raw HTTP calls.
+
+## Design
+
+Most of the application structure is handled by the `Spring Cloud Open Service Broker` which implements alle the controller logic. 
+
+
+The main business logic class is the `GenericServiceInstanceService` class. In this class there is the logic for selecting a cloud provider based on the `Platform Id` with a dedicated Factory class that handles the selection. The factory returns an implentation of a `CloudProviderService` which forces to implement the basic operations of the API. Inside each implemetation of the `CloudProviderService` there will be a selector of the right operations to call for a given plan and service definition.
+
+
+The catalog definition is defined in the `CatalogConfiguration` class where there are two plans (one free the other business) and a service definition for a server-vm.
+
+The CloudProviderService will do the right action to manage this insances by calling the cloud provider's apis.
 
 
