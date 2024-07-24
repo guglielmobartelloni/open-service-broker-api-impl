@@ -43,7 +43,7 @@ public class BasicAuthManager implements AuthenticationManager {
             throw new BadCredentialsException("User does not exists");
         }
 
-        log.debug("Passowrd: {}", password);
+        log.debug("Password: {}", password);
         if (StringUtils.isBlank(password) || !passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Password is wrong");
         }
