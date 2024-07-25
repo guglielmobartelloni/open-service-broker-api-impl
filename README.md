@@ -54,6 +54,9 @@ curl --location --request PUT 'http://localhost:8080/aws/v2/service_instances/te
 
 Moreover, there are various cloud providers (AWS, GCP...) access keys stored on the db that will be used to manage the resources on the cloud.
 
+
+This approach was chosen because it leverages the user's cloud provider accounts to deploy the services. If multiple keys are used for a single cloud provider, an additional table will need to be created in the database, along with a mechanism to select the appropriate cloud provider.
+
 Ideally all the secrets stored in the db will be encrypted with strong hashing algorithms.
 
 In detail the user has the following data:
