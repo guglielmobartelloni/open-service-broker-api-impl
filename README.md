@@ -75,7 +75,7 @@ In detail the user has the following data:
 The way to connect to every cloud provider has to be considered for each case because different cloud providers have different way to interact with them. 
 
 In the case of AWS there is an official SDK for Java, this was used for the application. 
-For other cloud providers, you might need to use direct HTTP calls..
+For other cloud providers, you might need to use direct HTTP calls. 
 
 ## Design
 
