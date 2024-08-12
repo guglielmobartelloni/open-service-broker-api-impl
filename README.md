@@ -1,4 +1,4 @@
-# Yanchware Assesment
+# Open Service Broker API
 
 
 This application was created in ~10 hours for the Yanchware interview, it uses the Spring Boot framework with Java.
